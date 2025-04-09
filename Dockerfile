@@ -3,7 +3,9 @@
 # https://github.com/ether/etherpad-lite
 #
 # Author: muxator
-ARG BUILD_ENV=git
+
+# Change this to "copy" to avoid the git directory dependency
+ARG BUILD_ENV=copy
 
 FROM node:alpine AS adminbuild
 RUN npm install -g pnpm@latest
@@ -12,7 +14,7 @@ COPY . .
 RUN pnpm install
 RUN pnpm run build:ui
 
-
+# The rest of the file remains unchanged
 FROM node:alpine AS build
 LABEL maintainer="Etherpad team, https://github.com/ether/etherpad-lite"
 
@@ -119,16 +121,11 @@ COPY --chown=etherpad:etherpad ./var ./var
 COPY --chown=etherpad:etherpad ./bin ./bin
 COPY --chown=etherpad:etherpad ./pnpm-workspace.yaml ./package.json ./
 
-
-
 FROM build AS build_git
 ONBUILD COPY --chown=etherpad:etherpad ./.git/HEA[D] ./.git/HEAD
 ONBUILD COPY --chown=etherpad:etherpad ./.git/ref[s] ./.git/refs
 
 FROM build AS build_copy
-
-
-
 
 FROM build_${BUILD_ENV} AS development
 
@@ -149,7 +146,6 @@ RUN bin/installDeps.sh && \
   if [ ! -z "${ETHERPAD_PLUGINS}" ] || [ ! -z "${ETHERPAD_GITHUB_PLUGINS}" ]; then \
       pnpm run plugins i ${ETHERPAD_PLUGINS} ${ETHERPAD_GITHUB_PLUGINS:+--github ${ETHERPAD_GITHUB_PLUGINS}}; \
   fi
-
 
 FROM build_${BUILD_ENV} AS production
 

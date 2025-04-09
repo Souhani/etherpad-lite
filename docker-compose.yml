@@ -1,7 +1,7 @@
 services:
   app:
+    build: .  # Build from local Dockerfile instead of using the image directly
     user: "0:0"
-    image: etherpad/etherpad:latest
     tty: true
     stdin_open: true
     volumes:
@@ -19,7 +19,6 @@ services:
       DB_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
       DB_TYPE: "postgres"
       DB_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-admin}
-      # For now, the env var DEFAULT_PAD_TEXT cannot be unset or empty; it seems to be mandatory in the latest version of etherpad
       DEFAULT_PAD_TEXT: ${DOCKER_COMPOSE_APP_DEFAULT_PAD_TEXT:- }
       DISABLE_IP_LOGGING: ${DOCKER_COMPOSE_APP_DISABLE_IP_LOGGING:-false}
       SOFFICE: ${DOCKER_COMPOSE_APP_SOFFICE:-null}
@@ -27,7 +26,6 @@ services:
     restart: always
     ports:
       - "${DOCKER_COMPOSE_APP_PORT_PUBLISHED:-9001}:${DOCKER_COMPOSE_APP_PORT_TARGET:-9001}"
-
   postgres:
     image: postgres:15-alpine
     environment:
@@ -37,13 +35,8 @@ services:
       POSTGRES_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-admin}
       PGDATA: /var/lib/postgresql/data/pgdata
     restart: always
-    # Exposing the port is not needed unless you want to access this database instance from the host.
-    # Be careful when other postgres docker container are running on the same port
-    # ports:
-    #   - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
 volumes:
   postgres_data:
   plugins:
