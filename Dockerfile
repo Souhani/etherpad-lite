@@ -36,28 +36,18 @@ ENV TIMEZONE=${TIMEZONE}
 # Control the configuration file to be copied into the container.
 ARG SETTINGS=./settings.json.docker
 
-# plugins to install while building the container. By default no plugins are
-# installed.
-# If given a value, it has to be a space-separated, quoted list of plugin names.
-#
-# EXAMPLE:
-#   ETHERPAD_PLUGINS="ep_codepad ep_author_neat"
-ARG ETHERPAD_PLUGINS="ep_comments ep_page_viewer ep_airbrace ep_markdown ep_syntaxhighlight ep_collabtime ep_font_color ep_highlightwords ep_align ep_savebutton ep_text_color ep_fontsize ep_image_upload ep_codepad ep_embed ep_image_editor ep_table_of_contents ep_audio ep_video"
+# Define comprehensive set of most useful plugins
+ARG ETHERPAD_PLUGINS="ep_align ep_comments_page ep_font_color ep_font_size ep_headings2 \
+  ep_markdown ep_table_of_contents ep_image_upload ep_embedmedia ep_spellcheck \
+  ep_author_hover ep_cursortrace ep_font_family ep_subscript_and_superscript \
+  ep_set_title_on_pad ep_sticky_attributes ep_clear_formatting ep_adminpads2 \
+  ep_what_have_i_missed ep_author_follow ep_real_time_chat ep_countable \
+  ep_prompt_for_name ep_print ep_copy_paste_select_all"
 
-# local plugins to install while building the container. By default no plugins are
-# installed.
-# If given a value, it has to be a space-separated, quoted list of plugin names.
-#
-# EXAMPLE:
-#   ETHERPAD_LOCAL_PLUGINS="../ep_my_plugin ../ep_another_plugin"
+# local plugins to install while building the container.
 ARG ETHERPAD_LOCAL_PLUGINS=
 
-# github plugins to install while building the container. By default no plugins are
-# installed.
-# If given a value, it has to be a space-separated, quoted list of plugin names.
-#
-# EXAMPLE:
-#   ETHERPAD_GITHUB_PLUGINS="ether/ep_plugin"
+# github plugins to install while building the container.
 ARG ETHERPAD_GITHUB_PLUGINS=
 
 # Control whether abiword will be installed, enabling exports to DOC/PDF/ODT formats.
@@ -66,7 +56,7 @@ ARG ETHERPAD_GITHUB_PLUGINS=
 #
 # EXAMPLE:
 #   INSTALL_ABIWORD=true
-ARG INSTALL_ABIWORD=
+ARG INSTALL_ABIWORD=true
 
 # Control whether libreoffice will be installed, enabling exports to DOC/PDF/ODT formats.
 # By default, it is not installed.
@@ -74,7 +64,7 @@ ARG INSTALL_ABIWORD=
 #
 # EXAMPLE:
 #   INSTALL_LIBREOFFICE=true
-ARG INSTALL_SOFFICE=
+ARG INSTALL_SOFFICE=true
 
 # Install dependencies required for modifying access.
 RUN apk add --no-cache shadow bash
@@ -129,10 +119,10 @@ FROM build AS build_copy
 
 FROM build_${BUILD_ENV} AS development
 
-ARG ETHERPAD_PLUGINS=
-ARG ETHERPAD_LOCAL_PLUGINS=
-ARG ETHERPAD_LOCAL_PLUGINS_ENV=
-ARG ETHERPAD_GITHUB_PLUGINS=
+ARG ETHERPAD_PLUGINS
+ARG ETHERPAD_LOCAL_PLUGINS
+ARG ETHERPAD_LOCAL_PLUGINS_ENV
+ARG ETHERPAD_GITHUB_PLUGINS
 
 COPY --chown=etherpad:etherpad ./src/ ./src/
 COPY --chown=etherpad:etherpad --from=adminbuild /opt/etherpad-lite/src/ templates/admin./src/templates/admin
@@ -149,10 +139,10 @@ RUN bin/installDeps.sh && \
 
 FROM build_${BUILD_ENV} AS production
 
-ARG ETHERPAD_PLUGINS=
-ARG ETHERPAD_LOCAL_PLUGINS=
-ARG ETHERPAD_LOCAL_PLUGINS_ENV=
-ARG ETHERPAD_GITHUB_PLUGINS=
+ARG ETHERPAD_PLUGINS
+ARG ETHERPAD_LOCAL_PLUGINS
+ARG ETHERPAD_LOCAL_PLUGINS_ENV
+ARG ETHERPAD_GITHUB_PLUGINS
 
 ENV NODE_ENV=production
 ENV ETHERPAD_PRODUCTION=true
