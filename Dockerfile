@@ -27,9 +27,9 @@ ARG TIMEZONE=
 
 RUN \
   [ -z "${TIMEZONE}" ] || { \
-    apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
-    echo "${TIMEZONE}" > /etc/timezone; \
+  apk add --no-cache tzdata && \
+  cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && \
+  echo "${TIMEZONE}" > /etc/timezone; \
   }
 ENV TIMEZONE=${TIMEZONE}
 
@@ -42,7 +42,7 @@ ARG SETTINGS=./settings.json.docker
 #
 # EXAMPLE:
 #   ETHERPAD_PLUGINS="ep_codepad ep_author_neat"
-ARG ETHERPAD_PLUGINS=
+ARG ETHERPAD_PLUGINS="ep_comments ep_page_viewer ep_airbrace ep_markdown ep_syntaxhighlight ep_collabtime ep_font_color ep_highlightwords ep_align ep_savebutton ep_text_color ep_fontsize ep_image_upload ep_codepad ep_embed ep_image_editor ep_table_of_contents ep_audio ep_video"
 
 # local plugins to install while building the container. By default no plugins are
 # installed.
@@ -91,9 +91,9 @@ ARG EP_GID=0
 ARG EP_SHELL=
 
 RUN groupadd --system ${EP_GID:+--gid "${EP_GID}" --non-unique} etherpad && \
-    useradd --system ${EP_UID:+--uid "${EP_UID}" --non-unique} --gid etherpad \
-        ${EP_HOME:+--home-dir "${EP_HOME}"} --create-home \
-        ${EP_SHELL:+--shell "${EP_SHELL}"} etherpad
+  useradd --system ${EP_UID:+--uid "${EP_UID}" --non-unique} --gid etherpad \
+  ${EP_HOME:+--home-dir "${EP_HOME}"} --create-home \
+  ${EP_SHELL:+--shell "${EP_SHELL}"} etherpad
 
 ARG EP_DIR=/opt/etherpad-lite
 RUN mkdir -p "${EP_DIR}" && chown etherpad:etherpad "${EP_DIR}"
@@ -101,15 +101,15 @@ RUN mkdir -p "${EP_DIR}" && chown etherpad:etherpad "${EP_DIR}"
 # the mkdir is needed for configuration of openjdk-11-jre-headless, see
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199
 RUN  \
-    mkdir -p /usr/share/man/man1 && \
-    npm install pnpm@latest -g  && \
-    apk update && apk upgrade && \
-    apk add --no-cache \
-        ca-certificates \
-        curl \
-        git \
-        ${INSTALL_ABIWORD:+abiword abiword-plugin-command} \
-        ${INSTALL_SOFFICE:+libreoffice openjdk8-jre libreoffice-common}
+  mkdir -p /usr/share/man/man1 && \
+  npm install pnpm@latest -g  && \
+  apk update && apk upgrade && \
+  apk add --no-cache \
+  ca-certificates \
+  curl \
+  git \
+  ${INSTALL_ABIWORD:+abiword abiword-plugin-command} \
+  ${INSTALL_SOFFICE:+libreoffice openjdk8-jre libreoffice-common}
 
 USER etherpad
 
@@ -144,7 +144,7 @@ RUN bash -c ./bin/installLocalPlugins.sh
 
 RUN bin/installDeps.sh && \
   if [ ! -z "${ETHERPAD_PLUGINS}" ] || [ ! -z "${ETHERPAD_GITHUB_PLUGINS}" ]; then \
-      pnpm run plugins i ${ETHERPAD_PLUGINS} ${ETHERPAD_GITHUB_PLUGINS:+--github ${ETHERPAD_GITHUB_PLUGINS}}; \
+  pnpm run plugins i ${ETHERPAD_PLUGINS} ${ETHERPAD_GITHUB_PLUGINS:+--github ${ETHERPAD_GITHUB_PLUGINS}}; \
   fi
 
 FROM build_${BUILD_ENV} AS production
@@ -167,7 +167,7 @@ RUN bash -c ./bin/installLocalPlugins.sh
 
 RUN bin/installDeps.sh && \
   if [ ! -z "${ETHERPAD_PLUGINS}" ] || [ ! -z "${ETHERPAD_GITHUB_PLUGINS}" ]; then \
-      pnpm run plugins i ${ETHERPAD_PLUGINS} ${ETHERPAD_GITHUB_PLUGINS:+--github ${ETHERPAD_GITHUB_PLUGINS}}; \
+  pnpm run plugins i ${ETHERPAD_PLUGINS} ${ETHERPAD_GITHUB_PLUGINS:+--github ${ETHERPAD_GITHUB_PLUGINS}}; \
   fi
 
 # Copy the configuration file.
