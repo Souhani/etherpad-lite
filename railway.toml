@@ -1,0 +1,9 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+buildCommand = "docker build --build-arg BUILD_ENV=copy --build-arg SETTINGS=./settings.json.docker -t etherpad ."
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"
+healthcheckTimeout = 90
