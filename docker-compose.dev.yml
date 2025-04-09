@@ -1,25 +1,12 @@
-version: "3.8"
-
-# Add this file to extend the docker-compose setup, e.g.:
-# docker-compose build --no-cache
-# docker-compose up -d --build --force-recreate
-
 services:
   app:
-    build:
-      context: .
-      args:
-        # Attention: installed plugins in the node_modules folder get overwritten during volume mount in dev
-        ETHERPAD_PLUGINS:
-      # change from development to production if needed
-      target: development
+    user: "0:0"
+    image: etherpad/etherpad:latest
     tty: true
     stdin_open: true
     volumes:
-      # no volume mapping of node_modules as otherwise the build-time installed plugins will be overwritten with the mount
-      # the same applies to package.json and pnpm-lock.yaml in root dir as these would also get overwritten and build time installed plugins will be removed
-      - ./src:/opt/etherpad-lite/src
-      - ./bin:/opt/etherpad-lite/bin
+      - plugins:/opt/etherpad-lite/src/plugin_packages
+      - etherpad-var:/opt/etherpad-lite/var
     depends_on:
       - postgres
     environment:
