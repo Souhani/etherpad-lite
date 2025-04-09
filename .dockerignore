@@ -22,7 +22,6 @@ Dockerfile
 .git/rr-cache/
 .gitignore
 
-settings.json
 src/node_modules
 admin/node_modules
 ui/node_modules

@@ -1,0 +1,10 @@
+{
+  "authenticationMethod": "apikey",
+  "requireAuthentication": true,
+  "users": {
+    "admin": {
+      "password": "123",
+      "is_admin": true
+    }
+  }
+}
