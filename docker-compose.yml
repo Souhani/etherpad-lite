@@ -1,6 +1,6 @@
 services:
   app:
-    build: .  # Build from local Dockerfile instead of using the image directly
+    build: . # Build from local Dockerfile instead of using the image directly
     user: "0:0"
     tty: true
     stdin_open: true
@@ -22,7 +22,22 @@ services:
       DB_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
       DB_TYPE: "postgres"
       DB_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-admin}
-      DEFAULT_PAD_TEXT: ${DOCKER_COMPOSE_APP_DEFAULT_PAD_TEXT:- }
+      DEFAULT_PAD_TEXT: "# Plan d'action
+
+
+        ## Étape 1
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+
+        ## Étape 2
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+
+        ## Étape 3
+
+        (Ajoutez votre contenu ici)"
       DISABLE_IP_LOGGING: ${DOCKER_COMPOSE_APP_DISABLE_IP_LOGGING:-false}
       SOFFICE: ${DOCKER_COMPOSE_APP_SOFFICE:-null}
       TRUST_PROXY: ${DOCKER_COMPOSE_APP_TRUST_PROXY:-true}
