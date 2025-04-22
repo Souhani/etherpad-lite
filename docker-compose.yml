@@ -22,20 +22,20 @@ services:
       DB_PORT: ${DOCKER_COMPOSE_POSTGRES_PORT:-5432}
       DB_TYPE: "postgres"
       DB_USER: ${DOCKER_COMPOSE_POSTGRES_USER:-admin}
-      DEFAULT_PAD_TEXT: "# Plan d'action
+      DEFAULT_PAD_TEXT: "# Plan d action
 
 
-        ## Étape 1
-
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-
-        ## Étape 2
+        1) Étape 1:
 
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
 
-        ## Étape 3
+        2) Étape 2:
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+
+        3) Étape 3
 
         (Ajoutez votre contenu ici)"
       DISABLE_IP_LOGGING: ${DOCKER_COMPOSE_APP_DISABLE_IP_LOGGING:-false}
