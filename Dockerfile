@@ -42,7 +42,7 @@ ARG ETHERPAD_PLUGINS="ep_align ep_comments_page ep_font_color ep_font_size ep_he
   ep_author_hover ep_cursortrace ep_font_family ep_subscript_and_superscript \
   ep_set_title_on_pad ep_sticky_attributes ep_clear_formatting ep_adminpads2 \
   ep_what_have_i_missed ep_author_follow ep_real_time_chat ep_countable \
-  ep_prompt_for_name ep_print ep_copy_paste_select_all ep_html_export"
+  ep_prompt_for_name ep_print ep_copy_paste_select_all"
 
 # local plugins to install while building the container.
 ARG ETHERPAD_LOCAL_PLUGINS=
